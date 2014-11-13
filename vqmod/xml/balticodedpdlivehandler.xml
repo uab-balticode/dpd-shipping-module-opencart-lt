@@ -1,0 +1,120 @@
+<modification>
+	<id><![CDATA[VQMOD CORE FOR OPENCART - DO NOT REMOVE]]></id>
+	<version><![CDATA[1.4.x and 1.5.x]]></version>
+	<vqmver><![CDATA[2.4.0]]></vqmver>
+    <author><![CDATA[Balticode]]></author>
+ 
+    <file name="admin/controller/sale/order.php">
+        <operation>
+            <search position="after" error="log"><![CDATA[$this->data['invoice']]]></search>
+                <add><![CDATA[
+                    $this->data['balticodedpdlivehandler_dpd_labels'] = $this->url->link('module/balticodedpdlivehandler/labels', 'token=' . $this->session->data['token'], 'SSL');
+                    $this->data['balticodedpdlivehandler_dpd_manifest'] = $this->url->link('module/balticodedpdlivehandler/manifest', 'token=' . $this->session->data['token'], 'SSL');
+                    $this->data['balticodedpdlivehandler_dpd_sendShipingDataToServer'] = $this->url->link('module/balticodedpdlivehandler/sendShipingDataToServer', 'token=' . $this->session->data['token'], 'SSL');
+                    $this->data['balticodedpdlivehandler_dpd_courier'] = $this->url->link('module/balticodedpdlivehandler/courier', 'token=' . $this->session->data['token'], 'SSL');
+                    $this->load->language('module/balticodedpdlivehandler');
+                    $this->data['text_button_send'] = $this->language->get('text_button_send');
+                    $this->data['text_button_reset'] = $this->language->get('text_button_reset');
+                    $this->data['text_button_close'] = $this->language->get('text_button_close');
+                    $this->data['text_parcels_label'] = $this->language->get('text_parcels_label');
+                    $this->data['text_pallets_label'] = $this->language->get('text_pallets_label');
+                    if(isset($_GET['warning'])) $this->error['warning'] = $_GET['warning'];
+                    if(isset($_POST['warning'])) $this->error['warning'] = $_POST['warning'];
+                    ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/sale/order_list.tpl">
+        <operation>
+            <search position="iafter" error="log"><![CDATA[<div class="buttons">]]></search>
+            <add><![CDATA[<?php if($this->config->get('balticodedpdlivehandler_status')){ 
+                if( $this->config->get('balticodedpdparcelstore_allow_courier_pickup') && $this->config->get('balticodedpdparcelstore_auto_send_data') ){ 
+                    $this->template = 'sale/order_send_dpd_data.tpl'; 
+                    echo $this->render(); ?>
+                    <a id="balticodedpdlivehandler_dpd_sendShipingDataToServer" onClick="jQuery('#balticodelivehandler_call_courier').show();" class="button"><?php echo $this->language->get('text_call_dpd_courier'); ?></a>
+                <?php } ?>
+                <a id="balticodelivehandler_send_dpd_data" onclick="validate_chkbox(this.form); $('#form').attr('action', '<? echo $balticodedpdlivehandler_dpd_sendShipingDataToServer; ?>'); $('#form').attr('target', '_self'); $('#form').submit();" class="button"><?php echo $this->language->get('text_send_shipping_data_to_server');?></a>
+                <a id="balticodedpdlivehandler_dpd_labels" onclick="validate_chkbox(this.form); $('#form').attr('action', '<? echo $balticodedpdlivehandler_dpd_labels; ?>'); $('#form').attr('target', '_self'); $('#form').submit();" class="button"><?php echo $this->language->get('text_print_labels'); ?></a><a id="balticodedpdlivehandler_dpd_manifest" onclick="validate_chkbox(this.form); $('#form').attr('action', '<? echo $balticodedpdlivehandler_dpd_manifest; ?>'); $('#form').attr('target', '_self'); $('#form').submit();" class="button"><?php echo $this->language->get('text_print_manifest');?></a>
+                <?php } ?>
+                ]]></add>
+        </operation>
+        <operation>
+            <search position="after" error="log" index="1"><![CDATA[</script>]]></search>
+            <add><![CDATA[<script>
+                    function validate_chkbox(form){
+                        var searchIDs = $(".content input:checkbox:checked").map(function(){
+                          return $(this).val();
+                        }).get();
+                        if($.isEmptyObject(searchIDs)) {
+                            alert("<?php echo $this->language->get('text_select_error'); ?>");
+                        }
+                    }
+                </script>]]></add>
+        </operation>
+    </file>
+
+
+    <file name="admin/controller/sale/order.php">
+        <operation>
+            <search position="iafter" error="log"><![CDATA[$order_info = $this->model_sale_order->getOrder($order_id);]]></search>
+            <add><![CDATA[
+        $this->language->load('module/balticodedpdlivehandler');
+        $this->load->model('balticodedpdlivehandler/balticodedpdlivehandler');
+        $this->data['text_shipping_method_trace_number'] = $this->language->get('text_shipping_method_trace_number');
+        $this->data['shipping_method_trace_number'] = $this->model_balticodedpdlivehandler_balticodedpdlivehandler->getOrderBarcode($order_id);
+                ]]></add>
+        </operation>
+    </file>
+    <file name="admin/view/template/sale/order_info.tpl">
+        <operation>
+            <search position="replace" error="log" index="3"><![CDATA[<?php if ($shipping_method) { ?>]]></search>
+            <add><![CDATA[<?php if ($shipping_method_trace_number) { ?>
+                      <tr>
+                        <td><?php echo $text_shipping_method_trace_number; ?></td>
+                        <td><?php echo $shipping_method_trace_number; ?></td>
+                      </tr>
+                      <?php  } ?>
+                    <?php if ($shipping_method) { ?>]]></add>
+        </operation>
+    </file>
+
+    <file name="system/startup.php">
+        <operation>
+            <search position="after" error="log"><![CDATA['library/template.php');]]></search>
+            <add><![CDATA[require_once(DIR_SYSTEM . 'library/dompdf/dompdf_config.inc.php');]]></add>
+        </operation>
+    </file>
+    <file name="catalog/model/payment/cod.php">
+        <operation>
+            <search position="before" error="log"><![CDATA[$this->language->load('payment/cod');]]></search>
+            <add><![CDATA[if($this->session->data['shipping_method']&&(strpos($this->session->data['shipping_method']['code'], 'balticodedpdparcelstore') !== FALSE)&&!$this->config->get('balticodedpdparcelstore_enablecod')) { return false; }
+	    if($this->session->data['shipping_method']&&(strpos($this->session->data['shipping_method']['code'], 'balticodedpdcourier') !== FALSE)&&!$this->config->get('balticodedpdcourier_enablecod')) { return false; }]]></add>
+        </operation>
+    </file>
+     <file name="admin/model/sale/order.php">
+        <operation>
+            <search position="after" error="log"><![CDATA[$order_id = $this->db->getLastId();]]></search>
+            <add><![CDATA[
+	    if($this->config->get('balticodedpdparcelstore_auto_send_data')&&$this->config->get('balticodedpdparcelstore_order_status_id')&&$this->config->get('balticodedpdparcelstore_order_status_id')== (int)$data['order_status_id']) {
+                $this->load->model('balticodedpdlivehandler/balticodedpdlivehandler');
+		$this->model_balticodedpdlivehandler_balticodedpdlivehandler->orderSendData(array((int)$order_id));
+            }]]></add>
+        </operation>
+        <operation>
+            <search position="before" error="log"><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "order_product WHERE order_id = '" . (int)$order_id . "'");]]></search>
+            <add><![CDATA[
+	    if($this->config->get('balticodedpdparcelstore_auto_send_data')&&$this->config->get('balticodedpdparcelstore_order_status_id')&&$this->config->get('balticodedpdparcelstore_order_status_id')== (int)$data['order_status_id']) {
+                $this->load->model('balticodedpdlivehandler/balticodedpdlivehandler');
+		$this->model_balticodedpdlivehandler_balticodedpdlivehandler->orderSendData(array((int)$order_id));
+            }]]></add>
+        </operation>
+        <operation>
+            <search position="after" error="log"><![CDATA[public function addOrderHistory($order_id, $data) {]]></search>
+            <add><![CDATA[
+	    if($this->config->get('balticodedpdparcelstore_auto_send_data')&&$this->config->get('balticodedpdparcelstore_order_status_id')&&$this->config->get('balticodedpdparcelstore_order_status_id')== (int)$data['order_status_id']&&!isset($data['no_send'])) {
+                $this->load->model('balticodedpdlivehandler/balticodedpdlivehandler');
+		$this->model_balticodedpdlivehandler_balticodedpdlivehandler->orderSendData(array((int)$order_id));
+            }]]></add>
+        </operation>
+    </file>
+</modification>

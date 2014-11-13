@@ -1,0 +1,246 @@
+@page {
+/*	margin-top: 2.54cm;
+	margin-left: 1.9cm;
+	margin-right: 1.32cm;
+	margin-bottom: 3.67cm;*/
+	margin-top: 1cm;
+	margin-left: 1cm;
+	margin-right: 1cm;
+	margin-bottom: 1cm;
+}
+body {
+	width: 210mm; /*for A4 page*/
+	font-family: dejavu serif;
+	margin: 0px;
+	padding: 0px;
+	font-size: 12px;
+}
+
+.header_top,
+.header,
+.orders,
+.extra,
+.signature{
+	width: 190mm;
+	border-style: line;
+	border: 0px solid;
+	border-spacing: 0px;
+	border-collapse: separate;
+}
+.header_top td,
+.header td,
+.orders td,
+.extra td,
+.signature td{
+	padding: 0px;
+	height: 12px;
+}
+.orders {
+	padding-bottom: 5px;
+}
+.header_top {
+	background-color: #FFFFFF;
+	width: 190mm;
+	border: 1px;
+	font-size: 14px;
+}
+
+/*First columb*/
+.header_top .label_company,
+.header_top .label_vat,
+.header_top .label_vat_code {
+	width: 220px;
+}
+/*Second columb*/
+.header_top .label_phone,
+.header_top .label_fax {
+	width: 100px;
+}
+/*third columb*/
+.header_top .value_phone,
+.header_top .value_fax {
+	width: 200px;
+}
+.header_top .logo {
+	text-align: right;
+	vertical-align: top;
+}
+.header_top .logo img {
+	width: 118px;
+	height: 85px;
+}
+
+.header .label_manifest_nr {
+	font-size: 16px;
+}
+
+.header .label_manifest_nr,
+.header .value_manifest_nr,
+.header .label_client,
+.header .value_client,
+.header .label_vat_code,
+.header .label_sphone {
+	height: 45px;
+	vertical-align: top;
+}
+.label_manifest_nr,
+.label_done_date {
+	width: 130px;
+}
+.label_client,
+.value_client_id {
+	width: 110px;
+}
+.label_order_nr{
+	width: 110px;
+}
+.label_order_type{
+	width: 100px;
+}
+.label_order_arrival{
+	/*width: 80px;*/
+}
+.label_order_phone{
+	width: 120px;
+}
+.label_order_weight{
+	width: 60px;
+}
+.label_order_number{
+	width: 160px;
+}
+.label_order_issn{
+	width: 40px;
+}
+tr.order_head > td {
+	padding-bottom: 20px;
+}
+tr.order > td {
+	padding-bottom: 20px;
+}
+.extra {
+	margin-bottom: 5px;
+}
+.extra .label_additional {
+	padding-left: 15px;
+}
+.extra .label_load {
+	padding-left: 20px;
+	width: 250px;
+}
+.extra .label_wait {
+	padding-left: 20px;
+	width: 250px;
+}
+.extra .label_smin {
+	width: 110px;
+}
+.issn .text_notification_title {
+	padding-left: 15px;
+}
+.issn .notification {
+	line-height:16px;
+	font-size:10px;
+	padding-left:5px;
+}
+.extra .text_conditions {
+	line-height:16px;
+	font-size:10px;
+	padding-left:5px;
+}
+table.extra {
+	width: 190mm;
+	border-style: line;
+	border: 2px solid;
+}
+table.extra .cell {
+	border-bottom: 1px solid;
+}
+table.extra .cell.last {
+	border-bottom: 0px solid;
+}
+.issn .value_issn_nr {
+	padding-left: 10px;
+	padding-bottom: 5px;
+}
+.checkbox {
+	margin-right:5px;
+	border: 2px solid;
+	width: 10px;
+	height: 10px;
+	display: inline-block;
+	line-height: 10px;
+}
+
+.checkbox_dotted {
+	border: 2px solid;
+	width: 20px;
+	height: 15px;
+	display: inline-block;
+	line-height: 15px;
+	border-style:dotted;
+	margin: 0px;
+}
+.checkbox_middle_box {
+	border-right-width: 0px;
+	border-left-width: 0px; 
+}
+.line {
+	background-color:#000; 
+	color:#000;
+	height:2px;
+}
+.line_w50 {
+	width: 50px;
+}
+.line_w100 {
+	width: 100px;
+}
+.line_w130 {
+	width: 130px;
+}
+.line_w150 {
+	width: 150px;
+}
+.line_w160 {
+	width: 160px;
+}
+.line_w200 {
+	width:200px;
+}
+.line_w250 {
+	width:250px;
+}
+.line_w350 {
+	width: 350px;
+}
+.line_w685 {
+	width: 685px;
+}
+.line_w720 {
+	width: 720px;
+}
+.line_h15 {
+	height: 15px;
+	line-height: 15px;
+}
+.line_h20{
+	line-height: 20px;
+	height: 20px !important;
+}
+.line_h25{
+	line-height: 25px;
+	height: 25px !important;
+}
+.bold {
+	font-weight: bold;
+}
+.allcaps {
+	text-transform: uppercase;
+}
+.center {
+	text-align: center;
+}
+.bottom {
+	vertical-align: bottom;
+}
