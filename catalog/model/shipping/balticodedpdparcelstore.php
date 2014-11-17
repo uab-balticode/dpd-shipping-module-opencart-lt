@@ -200,7 +200,7 @@ class ModelShippingbalticodedpdparcelstore extends Model {
 						/*
 						$quote_data['balticodedpdparcelstore_' . $result['geo_zone_id']] = array(
 							'code'         => 'balticodedpdparcelstore.balticodedpdparcelstore_' . $result['geo_zone_id'],
-							'title'        => $result['name'] . '  (' . $this->language->get('text_balticodedpdparcelstore') . ' ' . $this->weight->format($balticodedpdparcelstore_cartWeight, $this->config->get('config_balticodedpdparcelstore_class_id')) . ')',
+							'title'        => $result['name'] . '  (' . $this->language->get('text_balticodedpdparcelstore') . ' ' . $this->weight->format($balticodedpdparcelstore_cartWeight, $this->config->get('config_weight_class_id')) . ')',
 							'cost'         => $cost,
 							'tax_class_id' => $this->config->get('balticodedpdparcelstore_tax_class_id'),
 							'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('balticodedpdparcelstore_tax_class_id'), $this->config->get('config_tax')))

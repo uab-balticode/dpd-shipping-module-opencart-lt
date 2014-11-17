@@ -1,4 +1,7 @@
 <?php
+require_once(DIR_SYSTEM . 'library/cart.php');
+require_once(DIR_SYSTEM . 'library/currency.php');
+require_once(DIR_SYSTEM . 'library/weight.php');
 
 class ControllerModulebalticodedpdlivehandler extends Controller {
 	private $error = array(); 
@@ -118,25 +121,26 @@ class ControllerModulebalticodedpdlivehandler extends Controller {
 		$this->load->model('sale/order');
 		$this->load->model('catalog/product');
 		$bad_orders='';
+		$value_orders_weight=0;
 		foreach ($this->request->post['selected'] as $orderid) {
 			$orders[$orderid] = $this->model_sale_order->getOrder($orderid); //Load get Order info
-
 			$orders[$orderid]['tracking_number'] = $this->model_balticodedpdlivehandler_balticodedpdlivehandler->getOrderBarcode($orderid);
 			$products=$this->model_sale_order->getOrderProducts($orderid); //Load products of this order
 			$weight=0;
 			foreach ($products as $product) {
 				$product_data=$this->model_catalog_product->getProduct($product['product_id']);
-				$weight+=(float)$orders[$orderid]['weight'][$product['product_id']] = (float)$product_data['weight']*$product['quantity'];
+				$weight+=$this->weight->convert($product_data['weight']*$product['quantity'], $product_data['weight_class_id'], $this->config->get('config_weight_class_id'));
 				$this->data['value_packages_count'] += $product['quantity'];
 			}
-			$orders[$orderid]['total_weight'] = (float)$weight;
+			$orders[$orderid]['total_weight'] = $this->weight->format($weight,$this->config->get('config_weight_class_id'));
 			$orders[$orderid]['product_package'] = 'product_package';
+			$value_orders_weight+=$weight;
 			if ( !(!(false===strpos($orders[$orderid]['shipping_code'], self::SHIPPING_METHOD_CODE_PARCEL_STORE)) || !(false===strpos($orders[$orderid]['shipping_code'], self::SHIPPING_METHOD_CODE_COURIER))) ){ $bad_orders.=$orderid.', ';}
-			if (false === strpos($orders[$orderid]['shipping_code'], self::SHIPPING_METHOD_CODE_PARCEL_STORE)) {
+			if (!(false===strpos($orders[$orderid]['shipping_code'], self::SHIPPING_METHOD_CODE_PARCEL_STORE))) {
 				$orders[$orderid]['parcel_type'] = $this->language->get('value_parcel_shop'); 
 			} else {
 				if ($orders[$orderid]['payment_code'] == 'cod') //This is Cash on delivery?
-					$orders[$orderid]['parcel_type'] = $this->language->get('value_parcel_normal').'<br />'.$this->language->get('label_cash_on_delivery_short').', '.$this->language->get('label_delivery_to_private_person_short').'<br><strong>'.number_format($orders[$orderid]['total'], 2).'</strong>';  
+					$orders[$orderid]['parcel_type'] = $this->language->get('value_parcel_normal').'<br />'.$this->language->get('label_cash_on_delivery_short').', '.$this->language->get('label_delivery_to_private_person_short').'<br><strong>'.$this->currency->format($orders[$orderid]['total'],$orders[$orderid]['currency_code'],$orders[$orderid]['currency_value']).'</strong>';  
 				else
 					$orders[$orderid]['parcel_type'] = $this->language->get('value_parcel_normal').'<br />'.$this->language->get('label_delivery_to_private_person_short');
 			}
@@ -147,7 +151,7 @@ class ControllerModulebalticodedpdlivehandler extends Controller {
 			$warning = $this->language->get('text_bad_order_with_id').': '.$bad_orders.$this->language->get('text_error').': '.$this->language->get('text_not_dpd_shipping_method');
 			$this->redirect($this->url->link('sale/order', 'token=' . $this->session->data['token'].'&warning='.$warning, 'SSL'));
 		}
-
+		$this->data['value_orders_weight'] = $this->weight->format($value_orders_weight,$this->config->get('config_weight_class_id'));
 		$this->data['orders']=$orders;
 		// Load template ans set some vars for PDF generation
 		$_today = date('Y-m-d H:i:s');

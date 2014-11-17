@@ -102,7 +102,7 @@ class ModelShippingBalticodedpdcourier extends Model {
 				if ((string)$cost != '') { 
 					$quote_data['balticodedpdcourier_' . $result['geo_zone_id']] = array(
 						'code'         => 'balticodedpdcourier.balticodedpdcourier_' . $result['geo_zone_id'],
-						'title'        => 'DPD Courier '.$result['name'] . '  (' . $this->language->get('text_balticodedpdcourier') . ' ' . $this->weight->format($balticodedpdcourier_cartWeight, $this->config->get('config_balticodedpdcourier_class_id')) . ')',
+						'title'        => 'DPD Courier '.$result['name'] . '  (' . $this->language->get('text_balticodedpdcourier') . ' ' . $this->weight->format($balticodedpdcourier_cartWeight, $this->config->get('config_weight_class_id')) . ')',
 						'cost'         => $cost,
 						'tax_class_id' => $this->config->get('balticodedpdcourier_tax_class_id'),
 						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('balticodedpdcourier_tax_class_id'), $this->config->get('config_tax')))

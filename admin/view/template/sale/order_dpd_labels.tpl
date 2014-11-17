@@ -92,7 +92,7 @@
 		<tr>
 			<td class="bold"><?php echo $label_total; ?></td>
 			<td colspan="3">&nbsp;</td>
-			<td class="bold"><?php echo $value_total; ?></td>
+			<td class="bold"><?php echo $value_orders_weight; ?></td>
 			<td colspan="2">&nbsp;</td>
 		</tr>
 		<tr>
