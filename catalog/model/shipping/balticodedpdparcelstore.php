@@ -115,7 +115,7 @@ class ModelShippingbalticodedpdparcelstore extends Model {
 				$dropSelect .= '</label><select name="balticodeselect" id="balticodeselect" style="width: 250px;" onmousemove="" onclick="this.parentNode.parentNode.getElementsByTagName(\'input\')[0].checked = true;this.parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;" onchange="this.parentNode.parentNode.getElementsByTagName(\'input\')[0].checked = true;this.parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;">';
 				$groupsorttext = false;
 				foreach ($quotes as $q) {
-					if ($groupsorttext != $q['group_sort'])
+					if (trim($groupsorttext) != trim($q['group_sort']))
 					{
 						if ($groupsorttext)
 						{
@@ -261,20 +261,19 @@ class ModelShippingbalticodedpdparcelstore extends Model {
 		}
 		return ($a['group_sort_nr'] < $b['group_sort_nr']) ? 1 : -1;
 	}
-	
+	function groupNameCmp($a, $b)
+	{
+		if ($a['group_sort'] == $b['group_sort'])
+		{
+			return 0;
+		}
+		return ($a['group_sort'] < $b['group_sort']) ? -1 : 1;
+	}
 	
 	function _quote($country = '', $city = '', $state = '') {
 	    $city = htmlentities($city);
 	    $state = htmlentities($state);
 		$this->load->model('balticodedpdlivehandler/balticodedpdlivehandler');
-		//print_r ($this->model_balticodedpdlivehandler_balticodedpdlivehandler->getRequest());
-		//die;
-		//echo "<pre>";print_r ($this->model_balticodedpdlivehandler_balticodedpdlivehandler->autoSendData(array()));echo "</pre>";
-		//$barcodes = array ('05807040004194');
-		//echo "<pre>";print_r ($this->model_balticodedpdlivehandler_balticodedpdlivehandler->getPDF($barcodes, true));echo "</pre>";
-		//$dpdparcelshopstxt = DIR_DOWNLOAD."/test.pdf";
-		//file_put_contents($dpdparcelshopstxt, $this->model_balticodedpdlivehandler_balticodedpdlivehandler->getPDF($barcodes, true));
-		//die;
 		$responseObj = $this->model_balticodedpdlivehandler_balticodedpdlivehandler->getRequest();
 		if ($responseObj)
 		{
@@ -303,6 +302,11 @@ class ModelShippingbalticodedpdparcelstore extends Model {
 						}
 					}
 				}
+			}
+			usort($result, array('ModelShippingbalticodedpdparcelstore', 'groupNameCmp'));
+			for ($i = 0; $i < count($result); $i++)
+			{
+				$result[$i]['group_sort_nr'] = $result[$i]['group_sort_nr'] * 1000 - $i;
 			}
 			if ($result && $this->config->get('balticodedpdparcelstore_sort_office_by_priority')) {
 				usort($result, array('ModelShippingbalticodedpdparcelstore', 'groupCmp'));
