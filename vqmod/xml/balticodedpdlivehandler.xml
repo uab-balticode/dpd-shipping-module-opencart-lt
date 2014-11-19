@@ -117,4 +117,28 @@
             }]]></add>
         </operation>
     </file>
+    <file name="catalog/view/theme/*/template/checkout/cart.tpl">
+        <operation>
+            <search position="replace" error="log"><![CDATA[$('input[name=\'shipping_method\']').bind('change', function() {]]></search>
+            <add><![CDATA[$('input[name=\'shipping_method\'], #balticodeselect').bind('change', function() {]]></add>
+        </operation>
+	<operation>
+            <search position="after" error="log"><![CDATA[for (j in json['shipping_method'][i]['quote']) {]]></search>
+            <add><![CDATA[var stringas = json['shipping_method'][i]['quote'][j]['code'];
+                                                        if ((stringas.indexOf("balticodedpdparcelstore.balticodedpdparcelstore_begin") > -1) || (stringas.indexOf("balticodedpdparcelstore.balticodedpdparcelstore_begin") > -1)) {
+                                                          html += '<tr class="highlight" style="display:none">';
+							
+							if (json['shipping_method'][i]['quote'][j]['code'] == '<?php echo $shipping_method; ?>') {
+								html += '<td><input type="radio" name="shipping_method" value="' + json['shipping_method'][i]['quote'][j]['code'] + '" id="' + json['shipping_method'][i]['quote'][j]['code'] + '" checked="checked" /></td>';
+							} else {
+								html += '<td><input type="radio" name="shipping_method" value="' + json['shipping_method'][i]['quote'][j]['code'] + '" id="' + json['shipping_method'][i]['quote'][j]['code'] + '" /></td>';
+							}
+								
+							html += '  <td><label for="' + json['shipping_method'][i]['quote'][j]['code'] + '">' + json['shipping_method'][i]['quote'][j]['title'] + '</label></td>';
+							html += '  <td style="text-align: right;"><label for="' + json['shipping_method'][i]['quote'][j]['code'] + '">' + json['shipping_method'][i]['quote'][j]['text'] + '</label></td>';
+							html += '</tr>';
+                                                          continue;
+                                                        }]]></add>
+        </operation>
+    </file>
 </modification>

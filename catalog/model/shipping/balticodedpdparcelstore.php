@@ -105,7 +105,7 @@ class ModelShippingbalticodedpdparcelstore extends Model {
 					
 					$checkbox = 'balticodedpdparcelstore.balticodedpdparcelstore_select';
 //		print_r($this->session->data['shipping_method']);
-		if (isset($this->session->data['shipping_method']) && strpos($this->session->data['shipping_method']['id'], 'balticodedpdparcelstore') !== false) {
+		if (isset($this->session->data['shipping_method']) && isset($this->session->data['shipping_method']['id']) && strpos($this->session->data['shipping_method']['id'], 'balticodedpdparcelstore') !== false) {
 			$checkbox = $this->session->data['shipping_method']['id'];
 		}
 					
@@ -124,7 +124,7 @@ class ModelShippingbalticodedpdparcelstore extends Model {
 						$groupsorttext = $q['group_sort'];
 						$dropSelect .= '<optgroup label="'.$groupsorttext.'">';
 					}
-					if (isset($this->session->data['shipping_method']) && $this->session->data['shipping_method']['id'] == 'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id']) {
+					if (isset($this->session->data['shipping_method']) && isset($this->session->data['shipping_method']['id']) && $this->session->data['shipping_method']['id'] == 'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id']) {
 						$dropSelect .= "<option value='".'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id']."' selected='selected'>".$q['title']."</option>\r\n";
 					} else {
 						$dropSelect .= "<option value='".'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id']."'>".$q['title']."</option>\r\n";
