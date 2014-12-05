@@ -137,7 +137,11 @@ class ControllerModulebalticodedpdlivehandler extends Controller {
 			$value_orders_weight+=$weight;
 			if ( !(!(false===strpos($orders[$orderid]['shipping_code'], self::SHIPPING_METHOD_CODE_PARCEL_STORE)) || !(false===strpos($orders[$orderid]['shipping_code'], self::SHIPPING_METHOD_CODE_COURIER))) ){ $bad_orders.=$orderid.', ';}
 			if (!(false===strpos($orders[$orderid]['shipping_code'], self::SHIPPING_METHOD_CODE_PARCEL_STORE))) {
-				$orders[$orderid]['parcel_type'] = $this->language->get('value_parcel_shop'); 
+				$orders[$orderid]['parcel_type'] = $this->language->get('value_parcel_shop');
+				$parcelshopinfo = $this->model_balticodedpdlivehandler_balticodedpdlivehandler->getParcelshop($orders[$orderid]['shipping_code']);
+			    $orders[$orderid]['shipping_address_1'] = $parcelshopinfo['company'].'<br>'.$parcelshopinfo['street'];
+			    $orders[$orderid]['shipping_postcode'] = $parcelshopinfo['pcode'];
+			    $orders[$orderid]['shipping_zone'] = $parcelshopinfo['city']; 
 			} else {
 				if ($orders[$orderid]['payment_code'] == 'cod') //This is Cash on delivery?
 					$orders[$orderid]['parcel_type'] = $this->language->get('value_parcel_normal').'<br />'.$this->language->get('label_cash_on_delivery_short').', '.$this->language->get('label_delivery_to_private_person_short').'<br><strong>'.$this->currency->format($orders[$orderid]['total'],$orders[$orderid]['currency_code'],$orders[$orderid]['currency_value']).'</strong>';  
