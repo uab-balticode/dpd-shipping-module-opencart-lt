@@ -101,7 +101,7 @@
 		</tr>
 		<tr>
 			<td><?php echo $label_packages_count; ?></td>
-			<td colspan="6"><?php echo $value_packages_count; ?></td>
+			<td colspan="6"><?php echo count($orders);//$value_packages_count; ?></td>
 		</tr>
 	</table>
 <?php } ?>

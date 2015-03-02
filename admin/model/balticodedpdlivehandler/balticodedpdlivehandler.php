@@ -161,6 +161,7 @@ class ModelBalticodedpdlivehandlerBalticodedpdlivehandler extends Model {
 			$weight += $product_data['weight'];
 			$quantity += $product['quantity'];
 		}
+		$quantity = 1;
 		//print_r($orderObj);
 		$returnDetails = array();
 		if (strpos($orderObj['shipping_code'], self::PARCELSTORECODE) !== FALSE)

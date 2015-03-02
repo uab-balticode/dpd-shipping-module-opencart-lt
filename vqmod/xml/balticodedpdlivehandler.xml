@@ -87,7 +87,7 @@
     <file name="catalog/model/payment/cod.php">
         <operation>
             <search position="before" error="log"><![CDATA[$this->language->load('payment/cod');]]></search>
-            <add><![CDATA[if($this->session->data['shipping_method']&&(strpos($this->session->data['shipping_method']['code'], 'balticodedpdparcelstore') !== FALSE)&&!$this->config->get('balticodedpdparcelstore_enablecod')) { return false; }
+            <add><![CDATA[if(isset($this->session->data['shipping_method'])&&$this->session->data['shipping_method']&&(strpos($this->session->data['shipping_method']['code'], 'balticodedpdparcelstore') !== FALSE)&&!$this->config->get('balticodedpdparcelstore_enablecod')) { return false; }
 	    if($this->session->data['shipping_method']&&(strpos($this->session->data['shipping_method']['code'], 'balticodedpdcourier') !== FALSE)&&!$this->config->get('balticodedpdcourier_enablecod')) { return false; }]]></add>
         </operation>
     </file>
