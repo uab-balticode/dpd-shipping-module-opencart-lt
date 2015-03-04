@@ -170,8 +170,9 @@ class ModelBalticodedpdlivehandlerBalticodedpdlivehandler extends Model {
 		    if ($parcelshopinfo)
 		    {
 			$returnDetails = array(
-			    'name1' => $parcelshopinfo['company'],
-			    'street' => $parcelshopinfo['street'],
+				'name1' => $orderObj['shipping_firstname'].' '.$orderObj['shipping_lastname'],
+			    'name2' => $parcelshopinfo['company'],
+			    'street' => $parcelshopinfo['company'],
 			    'pcode' => $parcelshopinfo['pcode'],
 			    'country' => $parcelshopinfo['country'],
 			    'city' => $parcelshopinfo['city'],
