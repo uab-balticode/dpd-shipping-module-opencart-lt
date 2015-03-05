@@ -111,89 +111,103 @@ class ModelShippingbalticodedpdparcelstore extends Model {
 					
 					$quotes = $this->_quote($address['iso_code_2']);
 					if ($quotes) {
-						$dropSelect = '';
-				$dropSelect .= '</label><select name="balticodeselect" id="balticodeselect" style="width: 250px;" onmousemove="" onclick="this.parentNode.parentNode.getElementsByTagName(\'input\')[0].checked = true;this.parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;" onchange="this.parentNode.parentNode.getElementsByTagName(\'input\')[0].checked = true;this.parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;">';
-				$groupsorttext = false;
-				foreach ($quotes as $q) {
-					if (trim($groupsorttext) != trim($q['group_sort']))
-					{
-						if ($groupsorttext)
-						{
-							$dropSelect .= '</optgroup>';
+						if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], '/admin/') !== FALSE) {
+							foreach ($quotes as $q) {
+								$quote_data['balticodedpdparcelstore'.$q['id']] = array(
+									'id'           => 'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id'],
+									'code'           => 'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id'],
+									'title'        => 'DPD Siuntų taškai - '.$q['title'],
+									'cost'         => $cost,
+									'tax_class_id' => $this->config->get('balticodedpdparcelstore_tax_class_id'),
+									'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('balticodedpdparcelstore_tax_class_id'), $this->config->get('config_tax')))
+								);
+							}
+							
 						}
-						$groupsorttext = $q['group_sort'];
-						$dropSelect .= '<optgroup label="'.$groupsorttext.'">';
-					}
-					if (isset($this->session->data['shipping_method']) && isset($this->session->data['shipping_method']['id']) && $this->session->data['shipping_method']['id'] == 'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id']) {
-						$dropSelect .= "<option value='".'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id']."' selected='selected'>".$q['title']."</option>\r\n";
-					} else {
-						$dropSelect .= "<option value='".'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id']."'>".$q['title']."</option>\r\n";
-					}
-				}
-				if ($groupsorttext)
-				{
-					$dropSelect .= '</optgroup>';
-				}
-	//			print_r($this->cart->getProducts());
-				$dropSelect .= "</select>";//.print_r($address, true);iso_code_2
-				$dropSelect .= "<label> &nbsp;&nbsp;&nbsp; ";
-	//			$dropSelect .= '<script type="text/javascript">jQuery(document).ready( function() {var v = document.getElementById(\'balticodeselect\').parentNode.parentNode.nextSibling; while(v && v.nodeType != 1) {v = v.nextSibling;} v.style.display = \'none\';document.getElementById(\'balticodeselect\').parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;});</script>';
-	
-	//			$dropSelect .= '<script type="text/javascript">var iuuuuupo = function() {var v = document.getElementById(\'balticodeselect\').parentNode.parentNode.nextSibling; while(v && v.nodeType != 1) {v = v.nextSibling;} v.style.display = \'none\';document.getElementById(\'balticodeselect\').parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;}; iuuuuupo();</script>';
-				if (!isset($_POST['country_id'])) {
-	
-	
-					$dropSelect .= '<script type="text/javascript">jQuery(document).ready(function() {var v = document.getElementById(\'balticodeselect\').parentNode.parentNode.nextSibling; while(v && v.nodeType != 1) {v = v.nextSibling;} v.style.display = \'none\';document.getElementById(\'balticodeselect\').parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;});</script>';
-		//			$dropSelect .= '<script type="text/javascript">var iuuuuu = function() {var v = document.getElementById(\'balticodeselect\').parentNode.parentNode.nextSibling; while(v && v.nodeType != 1) {v = v.nextSibling;} v.style.display = \'none\';document.getElementById(\'balticodeselect\').parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;}; iuuuuu();</script>';
-				}
-	
-				$quote_data['balticodedpdparcelstore.balticodedpdparcelstore_select'] = array(
-					'id'           => $checkbox,
-					'code'           => $checkbox,
-					'title'        => $dropSelect,
-					'cost'         => $cost,
-					'tax_class_id' => $this->config->get('balticodedpdparcelstore_tax_class_id'),
-					'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('balticodedpdparcelstore_tax_class_id'), $this->config->get('config_tax')))
-				);
-	
-				/* begin start section hack */
-				$quote_data['balticodedpdparcelstore.balticodedpdparcelstore_begin'] = array(
-					'id'           => 'balticodedpdparcelstore.balticodedpdparcelstore_begin',
-					'code'           => 'balticodedpdparcelstore.balticodedpdparcelstore_begin',
-					'title'        => '<!--',
-					'cost'         => $cost,
-					'tax_class_id' => $this->config->get('balticodedpdparcelstore_tax_class_id'),
-					'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('balticodedpdparcelstore_tax_class_id'), $this->config->get('config_tax')))
-				);
-				/* end start section hack */
+						else {
+							$dropSelect = '';
+							$dropSelect .= '</label><select name="balticodeselect" id="balticodeselect" style="width: 250px;" onmousemove="" onclick="this.parentNode.parentNode.getElementsByTagName(\'input\')[0].checked = true;this.parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;" onchange="this.parentNode.parentNode.getElementsByTagName(\'input\')[0].checked = true;this.parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;">';
+							$groupsorttext = false;
+							foreach ($quotes as $q) {
+								if (trim($groupsorttext) != trim($q['group_sort']))
+								{
+									if ($groupsorttext)
+									{
+										$dropSelect .= '</optgroup>';
+									}
+									$groupsorttext = $q['group_sort'];
+									$dropSelect .= '<optgroup label="'.$groupsorttext.'">';
+								}
+								if (isset($this->session->data['shipping_method']) && isset($this->session->data['shipping_method']['id']) && $this->session->data['shipping_method']['id'] == 'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id']) {
+									$dropSelect .= "<option value='".'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id']."' selected='selected'>".$q['title']."</option>\r\n";
+								} else {
+									$dropSelect .= "<option value='".'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id']."'>".$q['title']."</option>\r\n";
+								}
+							}
+							if ($groupsorttext)
+							{
+								$dropSelect .= '</optgroup>';
+							}
+				//			print_r($this->cart->getProducts());
+							$dropSelect .= "</select>";//.print_r($address, true);iso_code_2
+							$dropSelect .= "<label> &nbsp;&nbsp;&nbsp; ";
+				//			$dropSelect .= '<script type="text/javascript">jQuery(document).ready( function() {var v = document.getElementById(\'balticodeselect\').parentNode.parentNode.nextSibling; while(v && v.nodeType != 1) {v = v.nextSibling;} v.style.display = \'none\';document.getElementById(\'balticodeselect\').parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;});</script>';
 				
-				foreach ($quotes as $q) {
-					$quote_data['balticodedpdparcelstore'.$q['id']] = array(
-						'id'           => 'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id'],
-						'code'           => 'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id'],
-						'title'        => 'DPD Siuntų taškai - '.$q['title'],
-						'cost'         => $cost,
-						'tax_class_id' => $this->config->get('balticodedpdparcelstore_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('balticodedpdparcelstore_tax_class_id'), $this->config->get('config_tax')))
-					);
-				}
+				//			$dropSelect .= '<script type="text/javascript">var iuuuuupo = function() {var v = document.getElementById(\'balticodeselect\').parentNode.parentNode.nextSibling; while(v && v.nodeType != 1) {v = v.nextSibling;} v.style.display = \'none\';document.getElementById(\'balticodeselect\').parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;}; iuuuuupo();</script>';
+							if (!isset($_POST['country_id'])) {
 				
 				
-				/* begin end section hack */
-				$quote_data['balticodedpdparcelstore.balticodedpdparcelstore_end'] = array(
-					'id'           => 'balticodedpdparcelstore.balticodedpdparcelstore_end',
-					'code'           => 'balticodedpdparcelstore.balticodedpdparcelstore_end',
-					'title'        => '-->',
-					'cost'         => $cost,
-					'tax_class_id' => $this->config->get('balticodedpdparcelstore_tax_class_id'),
-					'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('balticodedpdparcelstore_tax_class_id'), $this->config->get('config_tax')))
-				);
-				/* end end section hack */
-						
-						
-						
-						
-						
+								$dropSelect .= '<script type="text/javascript">jQuery(document).ready(function() {var v = document.getElementById(\'balticodeselect\').parentNode.parentNode.nextSibling; while(v && v.nodeType != 1) {v = v.nextSibling;} v.style.display = \'none\';document.getElementById(\'balticodeselect\').parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;});</script>';
+					//			$dropSelect .= '<script type="text/javascript">var iuuuuu = function() {var v = document.getElementById(\'balticodeselect\').parentNode.parentNode.nextSibling; while(v && v.nodeType != 1) {v = v.nextSibling;} v.style.display = \'none\';document.getElementById(\'balticodeselect\').parentNode.parentNode.getElementsByTagName(\'input\')[0].value = document.getElementById(\'balticodeselect\').value;}; iuuuuu();</script>';
+							}
+				
+							$quote_data['balticodedpdparcelstore.balticodedpdparcelstore_select'] = array(
+								'id'           => $checkbox,
+								'code'           => $checkbox,
+								'title'        => $dropSelect,
+								'cost'         => $cost,
+								'tax_class_id' => $this->config->get('balticodedpdparcelstore_tax_class_id'),
+								'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('balticodedpdparcelstore_tax_class_id'), $this->config->get('config_tax')))
+							);
+				
+							/* begin start section hack */
+							$quote_data['balticodedpdparcelstore.balticodedpdparcelstore_begin'] = array(
+								'id'           => 'balticodedpdparcelstore.balticodedpdparcelstore_begin',
+								'code'           => 'balticodedpdparcelstore.balticodedpdparcelstore_begin',
+								'title'        => '<!--',
+								'cost'         => $cost,
+								'tax_class_id' => $this->config->get('balticodedpdparcelstore_tax_class_id'),
+								'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('balticodedpdparcelstore_tax_class_id'), $this->config->get('config_tax')))
+							);
+							/* end start section hack */
+							
+							foreach ($quotes as $q) {
+								$quote_data['balticodedpdparcelstore'.$q['id']] = array(
+									'id'           => 'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id'],
+									'code'           => 'balticodedpdparcelstore.balticodedpdparcelstore'.$q['id'],
+									'title'        => 'DPD Siuntų taškai - '.$q['title'],
+									'cost'         => $cost,
+									'tax_class_id' => $this->config->get('balticodedpdparcelstore_tax_class_id'),
+									'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('balticodedpdparcelstore_tax_class_id'), $this->config->get('config_tax')))
+								);
+							}
+							
+							
+							/* begin end section hack */
+							$quote_data['balticodedpdparcelstore.balticodedpdparcelstore_end'] = array(
+								'id'           => 'balticodedpdparcelstore.balticodedpdparcelstore_end',
+								'code'           => 'balticodedpdparcelstore.balticodedpdparcelstore_end',
+								'title'        => '-->',
+								'cost'         => $cost,
+								'tax_class_id' => $this->config->get('balticodedpdparcelstore_tax_class_id'),
+								'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('balticodedpdparcelstore_tax_class_id'), $this->config->get('config_tax')))
+							);
+							/* end end section hack */
+									
+									
+									
+									
+									
 						
 						
 						
@@ -205,6 +219,7 @@ class ModelShippingbalticodedpdparcelstore extends Model {
 							'tax_class_id' => $this->config->get('balticodedpdparcelstore_tax_class_id'),
 							'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('balticodedpdparcelstore_tax_class_id'), $this->config->get('config_tax')))
 						);*/
+						}
 					}
 				}
 			}
