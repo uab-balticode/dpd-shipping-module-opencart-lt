@@ -13,6 +13,7 @@
                     $this->data['balticodedpdlivehandler_dpd_sendShipingDataToServer'] = $this->url->link('module/balticodedpdlivehandler/sendShipingDataToServer', 'token=' . $this->session->data['token'], 'SSL');
                     $this->data['balticodedpdlivehandler_dpd_courier'] = $this->url->link('module/balticodedpdlivehandler/courier', 'token=' . $this->session->data['token'], 'SSL');
                     $this->load->language('module/balticodedpdlivehandler');
+                    $this->load->language('sale/order');
                     $this->data['text_button_send'] = $this->language->get('text_button_send');
                     $this->data['text_button_reset'] = $this->language->get('text_button_reset');
                     $this->data['text_button_close'] = $this->language->get('text_button_close');
