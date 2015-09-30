@@ -81,7 +81,7 @@ class ControllerModulebalticodedpdlivehandler extends Controller {
 		$this->load->model('balticodedpdlivehandler/balticodedpdlivehandler');
 
 		$log = $this->model_balticodedpdlivehandler_balticodedpdlivehandler->orderSendData($_POST['selected']);
-		if ($log&&$log['status'] == 'err'){
+		if ($log&&isset($log['status'])&&$log['status'] == 'err'){
 			$warning = $this->language->get('text_print_labels_feiled');
 			// foreach ($log['errarg'] as $value) {
 			
@@ -246,7 +246,7 @@ class ControllerModulebalticodedpdlivehandler extends Controller {
 		$this->load->model('balticodedpdlivehandler/balticodedpdlivehandler');
 		$barcodes = $_POST['selected'];
 		$log = $this->model_balticodedpdlivehandler_balticodedpdlivehandler->getPDF($barcodes);
-		if ($log&&$log['status'] == 'err'){
+		if ($log&&isset($log['status'])&&$log['status'] == 'err'){
 			$warning = $this->language->get('text_print_labels_feiled');
 			// foreach ($log['errarg'] as $value) {
 			
